@@ -9,7 +9,7 @@ export default class App extends React.Component {
         <Text>---------------- Jebret Amal ----------------</Text>
         <Text>Open up App.js to start working on your app!</Text>
         <Text>Hello,You have to increase your amal ok :)</Text>
-        <Entypo name="500px" size={32} color="green" />
+        <Entypo name="500px-with-circle" size={32} color="green" />
       </View>
     );
   }
