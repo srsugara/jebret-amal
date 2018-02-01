@@ -1,19 +1,35 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+
+//Component
+import Navigation from "./src/navigations/RootNavigation.js";
+
 let {width, height} = Dimensions.get('window')
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isReady: false
+    };
+  }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>---------------- Jebret Amal ----------------</Text>
-        <Text>Hello,You have to increase your amal ok :)</Text>
-        <Entypo name="500px-with-circle" size={50} color="green" />
-        
-      </View>
-    );
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
+    });
+
+    this.setState({ isReady: true });
+  }
+  render() {  
+    if (!this.state.isReady) {
+      {/* <Entypo name="500px-with-circle" size={50} color="green" /> */}
+      return <Expo.AppLoading />;
+    }
+    return <Navigation />;
   }
   
 }
