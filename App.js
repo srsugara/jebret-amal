@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Permissions, Constants } from 'expo';
 import { Entypo } from '@expo/vector-icons';
 
 //Component
@@ -14,6 +15,24 @@ export default class App extends React.Component {
       isReady: false
     };
   }
+
+  //get permission on ios
+  async componentDidMount() {
+    let result = await   
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (Constants.lisDevice && resut.status === 'granted') {
+     console.log("Notification permissions granted.")
+    }
+  }
+  //or
+  // async function getiOSNotificationPermission() {
+  //   const { status } = await Permissions.getAsync(
+  //     Permissions.NOTIFICATIONS
+  //   );
+  //   if (status !== 'granted') {
+  //     await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  //   }
+  // }
 
   async componentWillMount() {
     await Expo.Font.loadAsync({

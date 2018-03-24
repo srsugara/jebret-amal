@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import { CheckBox } from 'native-base'
+
+import { Notifications } from "expo";
 
 import styles from './styles';
 let current = new Date();
@@ -9,6 +11,9 @@ let month = current.getMonth() + 1;
 let year = current.getFullYear();
 let weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"]
 let day = weekday[current.getDay()];
+let hour = current.getHours();
+let minute = current.getMinutes();
+
 export default class LembarMutabaah extends Component {
 
   constructor (props) {
@@ -50,7 +55,7 @@ export default class LembarMutabaah extends Component {
           </ScrollView>
         </View>
         <View style={{alignItems:'center',marginTop: 10}}>
-          <TouchableOpacity style={styles.button} onPress={()=>alert('Data telah disimpan')} >
+          <TouchableOpacity style={styles.button} onPress={()=>this.submitReminder()} >
             <Text style={{fontSize: 15, color: 'white'}}>Simpan</Text>
           </TouchableOpacity>
         </View>
