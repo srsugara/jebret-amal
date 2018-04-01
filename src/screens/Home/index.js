@@ -10,10 +10,13 @@ import {
   Alert,
   Platform
 } from "react-native";
-import { Notifications } from 'expo';
+import { Notifications, SQLite } from 'expo';
 
 import styles from "./styles";
 
+const db = SQLite.openDatabase('db.db');
+
+//setting up notification
 const localNotification = {
   title: "Kerjakan dulu yuk sahabat",
   body: "Berlomba lomba ngelawan malas yuk, makin sering  ibadah makin tenang rasanya kok", // (string) — body text of the notification.
@@ -46,7 +49,7 @@ export default class Home extends React.Component {
 
   listenForNotifications = () => {
     Notifications.addListener(notification => {
-      console.log('xxxxxxx :',notification)
+      // console.log('xxxxxxx :',notification)
       if (notification.origin === 'received' && Platform.OS === 'android') {
         let amal = "tilawah";
         setTimeout(() => {
@@ -62,8 +65,50 @@ export default class Home extends React.Component {
   };
 
   componentWillMount() {
+    db.transaction(tx => {
+      // tx.executeSql(
+      //   'create table if not exists items (id integer primary key not null, done int, value text);'
+      // );
+      tx.executeSql(
+        // 'create table if not exists mutabaah_yaumiyah (id integer primary key not null, nama text);'
+        'create table if not exists mutabaah_yaumiyah (id integer primary key not null, nama text, unique (nama));'
+      );
+      // tx.executeSql(
+      //   'create table if not exists hari (id integer primary key not null, nama text);'
+      // );
+      // tx.executeSql(
+      //   'create table if not exists  rencana_reminder (id integer primary key not null, waktu text, id_m integer NOT NULL, id_m integer NOT NULL, FOREIGN KEY (id_m) REFERENCES mutabaah_yaumiyah(id),FOREIGN KEY (id_h) REFERENCES hari(id));'
+      // );
+      // tx.executeSql(
+      //   'create table if not exists selesai_reminder (id integer primary key not null, tanggal text, selesai int, id_r integer NOT NULL, FOREIGN KEY (id_r) REFERENCES rencana_reminder(id));'
+      // );
+    },
+    null,
+    this.add );
     this.listenForNotifications();
   }
+
+  // componentDidMount() {
+  //   db.transaction(tx => {
+  //     tx.executeSql('insert into mutabaah_yaumiyah (nama) values (`sholat dhuha`),(`sholat tahajud`),(`tilawah`)');
+  //   });
+  // }
+
+  add() {
+    db.transaction(
+      tx => {
+        tx.executeSql(`insert into mutabaah_yaumiyah (nama) values ('Dhuha'),('Qiyamul lail'),('Tilawah')`);
+        // tx.executeSql(
+        //   'DROP TABLE mutabaah_yaumiyah'
+        // );
+        // tx.executeSql(`delete from mutabaah_yaumiyah`);
+        // tx.executeSql(`delete from mutabaah_yaumiyah where nama = 'woiwoi';`);
+      },
+      null,
+      null
+    );
+  }
+
   render() {
     return (
       <Image
