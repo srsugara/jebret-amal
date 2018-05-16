@@ -9,51 +9,54 @@ import TambahYaumiyah from "../screens/TambahYaumiyah/index.js";
 import LembarMutabaah from "../screens/LembarMutabaah/index.js";
 import RekapMutabaah from "../screens/RekapMutabaah/index.js";
 
-const AppNavigator = StackNavigator({
-    Home: { 
+const AppNavigator = StackNavigator(
+  {
+    Home: {
       screen: HomeScreen,
       navigationOptions: () => ({
         header: null
-      }),
+      })
     },
-    DaftarMutabaah: { 
+    DaftarMutabaah: {
       screen: DaftarMutabaah,
       navigationOptions: () => ({
-        title: 'Daftar Mutabaah',
-      }),
+        title: "Daftar Mutabaah"
+      })
     },
-    LembarMutabaah: { 
+    LembarMutabaah: {
       screen: LembarMutabaah,
       navigationOptions: () => ({
-        title: 'Lembar Mutabaah',
-      }),
+        title: "Lembar Mutabaah"
+      })
     },
-    RekapMutabaah: { 
+    RekapMutabaah: {
       screen: RekapMutabaah,
       navigationOptions: () => ({
-        title: 'Rekap Mutabaah',
-      }),
+        title: "Rekap Mutabaah"
+      })
     },
     TambahYaumiyah: {
       screen: TambahYaumiyah,
       navigationOptions: () => ({
-        title: 'Tambah Yaumiyah',
-      }),
+        title: "Tambah Yaumiyah"
+      })
     }
-},{
-  navigationOptions: () => ({
-        headerStyle: {
-          backgroundColor: '#FFFFF0'
-        },
-        headerTitleStyle: {
-          color: '#8B0000'
-        },
-        headerTintColor: '#8B0000'
-      }),
-}
+  },
+  {
+    navigationOptions: () => ({
+      headerStyle: {
+        backgroundColor: "#FFFFF0"
+      },
+      headerTitleStyle: {
+        color: "#8B0000"
+      },
+      headerTintColor: "#8B0000"
+    })
+  }
 );
 
-export default () =>
+export default () => (
   <Root>
     <AppNavigator />
-  </Root>;
+  </Root>
+);

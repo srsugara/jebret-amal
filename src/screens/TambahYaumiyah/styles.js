@@ -1,39 +1,39 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#FFFFF0',
-      paddingTop: 10,
-      paddingBottom: 10
+    flex: 1,
+    backgroundColor: "#FFFFF0",
+    paddingTop: 10,
+    paddingBottom: 10
   },
   wrapInput: {
-      height:height/12,
-      backgroundColor: 'white',
-      flexDirection:'row',
-      alignItems: 'center',
-      borderBottomWidth: 1,
-      borderColor: '#E1E1E1',
-      marginLeft: 15,
-      marginRight: 15,
-      padding: 5,
-      paddingLeft: 15,
-      paddingRight: 15,
+    height: height / 12,
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderColor: "#E1E1E1",
+    marginLeft: 15,
+    marginRight: 15,
+    padding: 5,
+    paddingLeft: 15,
+    paddingRight: 15
   },
   iconInput: {
-      width: width/10,
-      height: width/10,
-      marginRight: 10
+    width: width / 10,
+    height: width / 10,
+    marginRight: 10
   },
   wrapDay: {
-    height:height/14,
-    backgroundColor: 'white',
-    flexDirection:'row',
-    alignItems: 'center',
+    height: height / 14,
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems: "center",
     borderBottomWidth: 1,
-    borderColor: '#E1E1E1',
+    borderColor: "#E1E1E1",
     marginLeft: 15,
     marginRight: 15,
     paddingLeft: 15,
@@ -41,20 +41,20 @@ const styles = StyleSheet.create({
     padding: 5
   },
   textAmal: {
-      flex: 1,
-      fontSize: 20,
-      color: 'gray',
-      height: height/15,
-      marginRight: 10,
-      padding: 5
+    flex: 1,
+    fontSize: 20,
+    color: "gray",
+    height: height / 15,
+    marginRight: 10,
+    padding: 5
   },
   button: {
-     height: height/14,
-     width: width/2,
-     backgroundColor :'#8B0000',
-     alignItems:'center',
-     justifyContent: 'center',
-     borderRadius: 10
+    height: height / 14,
+    width: width / 2,
+    backgroundColor: "#8B0000",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10
   }
 });
 

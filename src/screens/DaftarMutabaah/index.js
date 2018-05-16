@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import Expo, { SQLite } from 'expo';
+import React, { Component } from "react";
+import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import Expo, { SQLite } from "expo";
 
-import styles from './styles';
+import styles from "./styles";
 
-const db = SQLite.openDatabase('db.db');
+const db = SQLite.openDatabase("db.db");
 
 export default class DaftarMutabaah extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class DaftarMutabaah extends Component {
     this.state = {
       // mutabaahs: [{key: 'Dhuha'}, {key: 'Tilawah'}, {key: 'Qiyamulail'}],
       mutabaahs: []
-    }
+    };
   }
 
   componentDidMount() {
@@ -20,7 +20,10 @@ export default class DaftarMutabaah extends Component {
       tx.executeSql(
         `select * from mutabaah_yaumiyah`,
         null,
-        (_, { rows: { _array } }) => this.setState({ mutabaahs: _array },() => console.log('*********',this.state.mutabaahs))
+        (_, { rows: { _array } }) =>
+          this.setState({ mutabaahs: _array }, () =>
+            console.log("*********", this.state.mutabaahs)
+          )
       );
       // tx.executeSql('select * from mutabaah_yaumiyah', [], (_, { rows }) =>
       //     console.log('************',JSON.stringify(rows))
@@ -40,12 +43,12 @@ export default class DaftarMutabaah extends Component {
   renderItem(item) {
     return (
       <View style={styles.wrapItem}>
-          <Text style={styles.textAmal}>{item}</Text>
-          <TouchableOpacity onPress={() => null}>
-            <Image source={require('../../../assets/icon/x-button.png')} />
-          </TouchableOpacity>
+        <Text style={styles.textAmal}>{item}</Text>
+        <TouchableOpacity onPress={() => null}>
+          <Image source={require("../../../assets/icon/x-button.png")} />
+        </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   render() {
@@ -53,15 +56,18 @@ export default class DaftarMutabaah extends Component {
       <View style={styles.container}>
         <FlatList
           data={this.state.mutabaahs}
-          renderItem={({item}) => this.renderItem(item.nama)}
+          renderItem={({ item }) => this.renderItem(item.nama)}
           keyExtractor={(item, index) => index}
         />
         <TouchableOpacity
-            activeOpacity={0.7} style={styles.floatingBtn}
-            onPress={() => this.props.navigation.navigate("TambahYaumiyah")}
-          >
-            <Text style={{ color: '#FFF', fontSize: 47, textAlign: 'center' }}>+</Text>
-          </TouchableOpacity>
+          activeOpacity={0.7}
+          style={styles.floatingBtn}
+          onPress={() => this.props.navigation.navigate("TambahYaumiyah")}
+        >
+          <Text style={{ color: "#FFF", fontSize: 47, textAlign: "center" }}>
+            +
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }

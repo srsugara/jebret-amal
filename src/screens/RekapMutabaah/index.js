@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Picker, PickerIOS, Platform } from "react-native";
-import { VictoryBar, VictoryChart, VictoryTheme} from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 
 import styles from "./styles";
 

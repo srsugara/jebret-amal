@@ -1,12 +1,12 @@
-import React from 'react';
-import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { Permissions, Constants } from 'expo';
-import { Entypo } from '@expo/vector-icons';
+import React from "react";
+import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
+import { Permissions, Constants } from "expo";
+import { Entypo } from "@expo/vector-icons";
 
 //Component
 import Navigation from "./src/navigations/RootNavigation.js";
 
-let {width, height} = Dimensions.get('window')
+let { width, height } = Dimensions.get("window");
 
 export default class App extends React.Component {
   constructor() {
@@ -18,10 +18,9 @@ export default class App extends React.Component {
 
   //get permission on ios
   async componentDidMount() {
-    let result = await   
-    Permissions.askAsync(Permissions.NOTIFICATIONS);
-    if (Constants.lisDevice && resut.status === 'granted') {
-     console.log("Notification permissions granted.")
+    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (Constants.lisDevice && resut.status === "granted") {
+      console.log("Notification permissions granted.");
     }
   }
   //or
@@ -43,23 +42,24 @@ export default class App extends React.Component {
 
     this.setState({ isReady: true });
   }
-  render() {  
+  render() {
     if (!this.state.isReady) {
-      {/* <Entypo name="500px-with-circle" size={50} color="green" /> */}
+      {
+        /* <Entypo name="500px-with-circle" size={50} color="green" /> */
+      }
       return <Expo.AppLoading />;
     }
     return <Navigation />;
   }
-  
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:30,
-    paddingBottom:10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    paddingTop: 30,
+    paddingBottom: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
