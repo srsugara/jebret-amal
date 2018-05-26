@@ -16,6 +16,8 @@ export default class TambahYaumiyah extends Component {
     super(props);
     this.state = {
       amal: "",
+      jam: "",
+      menit: "",
       check: {
         senin: false,
         selasa: false,
@@ -29,6 +31,7 @@ export default class TambahYaumiyah extends Component {
       days: []
     };
     this.checklist = this.checklist.bind(this);
+    this.addReminder = this.addReminder.bind(this);
   }
 
   onChanged(text, type) {
@@ -53,17 +56,24 @@ export default class TambahYaumiyah extends Component {
   checklist(day) {
     // console.log("-------", this.state.check[day])
     console.log("before count : ", this.state.count, "days", this.state.days);
-    let check = Object.assign({}, this.state.check);    //creating copy of object
-    if (this.state.check[day] === false) { 
+    let check = Object.assign({}, this.state.check); //creating copy of object
+    if (this.state.check[day] === false) {
       check[day] = true;
-      this.setState({
-        check: check,
-        count: this.state.count + 1,
-        days: [...this.state.days, day]
-      },() => 
-      console.log("after count : ", this.state.count, "days", this.state.days));
-    }
-     else {
+      this.setState(
+        {
+          check: check,
+          count: this.state.count + 1,
+          days: [...this.state.days, day]
+        },
+        () =>
+          console.log(
+            "after count : ",
+            this.state.count,
+            "days",
+            this.state.days
+          )
+      );
+    } else {
       let index = this.state.days.indexOf(day);
       check[day] = false;
       this.setState({
@@ -77,20 +87,34 @@ export default class TambahYaumiyah extends Component {
   addReminder() {
     db.transaction(
       tx => {
-        tx.executeSql(
-          `insert into mutabaah_yaumiyah (nama) values ('Dhuha'),('Qiyamul lail'),('Tilawah')`
-        );
+        tx.executeSql(`insert into mutabaah_yaumiyah (nama) values (?)`, [
+          this.state.amal
+        ]);
+        for (i = 0; i < this.state.count; i++) {
+          tx.executeSql(
+            `insert into transaksi_reminder (nama_mutabaah,hari,waktu) values (?,?,?)`,
+            [
+              this.state.amal,
+              this.state.days[i],
+              this.state.jam + ":" + this.state.menit
+            ],
+            () => alert("Data telah ditambahkan"),
+            () => alert("Data gagal ditambahkan")
+          );
+        }
         // tx.executeSql(
         //   'DROP TABLE mutabaah_yaumiyah'
         // );
         // tx.executeSql(`delete from mutabaah_yaumiyah`);
         // tx.executeSql(`delete from mutabaah_yaumiyah where nama = 'woiwoi';`);
       },
-      null,
+      error => {
+        console.log("error add reminder ", error);
+      },
       null
     );
   }
-  
+
   render() {
     return (
       <View style={styles.container}>
@@ -141,7 +165,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.senin}
-                onPress={()=>this.checklist("senin")}
+                onPress={() => this.checklist("senin")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -149,7 +173,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.selasa}
-                onPress={()=>this.checklist("selasa")}
+                onPress={() => this.checklist("selasa")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -157,7 +181,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.rabu}
-                onPress={()=>this.checklist("rabu")}
+                onPress={() => this.checklist("rabu")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -165,7 +189,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.kamis}
-                onPress={()=>this.checklist("kamis")}
+                onPress={() => this.checklist("kamis")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -173,7 +197,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.jumat}
-                onPress={()=>this.checklist("jumat")}
+                onPress={() => this.checklist("jumat")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -181,7 +205,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.sabtu}
-                onPress={()=>this.checklist("sabtu")}
+                onPress={() => this.checklist("sabtu")}
               />
             </View>
             <View style={styles.wrapDay}>
@@ -189,7 +213,7 @@ export default class TambahYaumiyah extends Component {
               <CheckBox
                 color="#8B0000"
                 checked={this.state.check.minggu}
-                onPress={()=>this.checklist("minggu")}
+                onPress={() => this.checklist("minggu")}
               />
             </View>
           </ScrollView>
@@ -197,7 +221,7 @@ export default class TambahYaumiyah extends Component {
         <View style={{ alignItems: "center", marginTop: 10 }}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => alert("Data telah ditambahkan")}
+            onPress={() => this.addReminder()}
           >
             <Text style={{ fontSize: 15, color: "white" }}>Tambah</Text>
           </TouchableOpacity>

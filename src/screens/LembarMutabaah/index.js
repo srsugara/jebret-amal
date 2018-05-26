@@ -36,6 +36,7 @@ export default class LembarMutabaah extends Component {
       ]
     };
     this.checklistAmal = this.checklistAmal.bind(this);
+    console.log('hour->',hour,' minute->',minute);
   }
 
   checklistAmal(index) {
