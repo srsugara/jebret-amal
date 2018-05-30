@@ -16,9 +16,13 @@ import styles from "./styles";
 
 // const db = SQLite.openDatabase({name: 'ta.db', createFromLocation: '~jebret.db'});
 const db = SQLite.openDatabase("db.db");
-let t = new Date();
-t.setHours(9);
-t.setMinutes(26);
+let t = [];
+t[0] = new Date();
+t[0].setHours(14);
+t[0].setMinutes(13);
+t[1] = new Date();
+t[1].setHours(16);
+t[1].setMinutes(43);
 
 //setting up notification
 const localNotification = {
@@ -41,15 +45,19 @@ const localNotification = {
   }
 };
 
-const schedulingOptions1 = {
-  time: t // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-  // repeat: "week"
-};
-
-const schedulingOptions2 = {
-  time: (new Date()).getTime() + 1000 // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-  // repeat: "week"
-};
+const schedulingOptions = [
+  {
+    time: t[0] // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    // repeat: "week"
+  },
+  {
+    time: new Date().getTime() + 1000 // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    // repeat: "week"
+  },
+  {
+    time: t[1]
+  }
+];
 
 let listTime = [];
 
@@ -59,20 +67,17 @@ export default class Home extends React.Component {
     this.state = {
       tables: []
     };
-    Notifications.scheduleLocalNotificationAsync(
-      localNotification,
-      schedulingOptions1
-    );
-    Notifications.scheduleLocalNotificationAsync(
-      localNotification,
-      schedulingOptions2
-    );
-    console.log('waktuuuuuu', (new Date()).getTime()+1000);
+    for (i = 0; i < schedulingOptions.length; i++) {
+      Notifications.scheduleLocalNotificationAsync(
+        localNotification,
+        schedulingOptions[i]
+      );
+    }
   }
 
   listenForNotifications = () => {
     Notifications.addListener(notification => {
-      console.log('xxxxxxx :',notification)
+      console.log("xxxxxxx :", notification);
       if (notification.origin === "received") {
         let amal = "tilawah";
         setTimeout(() => {

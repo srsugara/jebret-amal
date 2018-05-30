@@ -8,6 +8,9 @@ import Navigation from "./src/navigations/RootNavigation.js";
 
 let { width, height } = Dimensions.get("window");
 
+//hide yellow warning
+console.disableYellowBox = true
+
 export default class App extends React.Component {
   constructor() {
     super();
