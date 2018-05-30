@@ -14,10 +14,12 @@
     "victory-native": "^0.17.2"
   },
   "devDependencies": {
+    "appr": "^2.0.0",
     "jest-expo": "^27.0.1"
   },
   "scripts": {
-    "test": "node_modules/.bin/jest"
+    "test": "node_modules/.bin/jest",
+    "appr": "appr"
   },
   "jest": {
     "preset": "jest-expo"
