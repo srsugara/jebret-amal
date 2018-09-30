@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Image,
+  ImageBackground,
   Dimensions,
   TouchableOpacity,
   ScrollView,
@@ -154,7 +155,7 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <Image
+      <ImageBackground
         style={styles.container}
         source={require("../../../assets/bg1.png")}
       >
@@ -168,7 +169,7 @@ export default class Home extends React.Component {
           </Text>
         </View>
         <View style={styles.wrapBanner}>
-          <Image
+          <ImageBackground
             style={styles.banner}
             source={require("../../../assets/Banners.png")}
           />
@@ -218,7 +219,7 @@ export default class Home extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
-      </Image>
+      </ImageBackground>
     );
   }
 }
