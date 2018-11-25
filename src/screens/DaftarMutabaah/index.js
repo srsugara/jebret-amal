@@ -41,7 +41,7 @@ export default class DaftarMutabaah extends Component {
         //   );
       },
       error => {
-        console.log("zzzzzzz", error);
+        console.log("error", error);
       },
       null
     );

@@ -1,15 +1,11 @@
 import React from "react";
 import {
-  StatusBar,
   View,
   Text,
   Image,
   ImageBackground,
-  Dimensions,
   TouchableOpacity,
-  ScrollView,
-  Alert,
-  Platform
+  Alert
 } from "react-native";
 import { Notifications, SQLite } from "expo";
 
@@ -21,9 +17,6 @@ let t = [];
 t[0] = new Date();
 t[0].setHours(14);
 t[0].setMinutes(13);
-t[1] = new Date();
-t[1].setHours(16);
-t[1].setMinutes(43);
 
 //setting up notification
 const localNotification = {
@@ -56,8 +49,9 @@ const schedulingOptions = [
     // repeat: "week"
   },
   {
-    time: t[1]
-  }
+    time: new Date().getTime() + 30000 // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    // repeat: "week"
+  },
 ];
 
 let listTime = [];
@@ -123,19 +117,26 @@ export default class Home extends React.Component {
     this.listenForNotifications();
   }
 
+  componentDidMount() {
+    this.insertFirst();
+  }
+
   insertFirst() {
+    console.log("datanya masukin");
     db.transaction(
       tx => {
-        tx.executeSql(
-          `INSERT INTO mutabaah_yaumiyah (nama) VALUES ('Dhuha'),('Tahajjud'),('Tilawah')`
-        );
+        // tx.executeSql(
+        //   `INSERT INTO mutabaah_yaumiyah (nama) VALUES ('Dhuha'),('Tahajjud'),('Tilawah')`
+        // );
         // tx.executeSql(`delete from mutabaah_yaumiyah`);
         // tx.executeSql(`delete from mutabaah_yaumiyah where nama = 'woiwoi';`);
       },
       error => {
-        console.log("grrrrrrrr", error);
+        console.log("error", error);
       },
-      this.deleteFirst
+      x => {
+        console.log("berhasil coi");
+      }
     );
   }
 

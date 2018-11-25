@@ -9,15 +9,17 @@ import {
   FlatList
 } from "react-native";
 import { CheckBox } from "native-base";
-
-import { Notifications } from "expo";
+import { SQLite } from "expo";
 
 import styles from "./styles";
+
+const db = SQLite.openDatabase("db.db");
+
 let current = new Date();
 let date = current.getDate();
 let month = current.getMonth() + 1;
 let year = current.getFullYear();
-let weekday = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+let weekday = ["minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
 let day = weekday[current.getDay()];
 let hour = current.getHours();
 let minute = current.getMinutes();
@@ -29,27 +31,45 @@ export default class LembarMutabaah extends Component {
       hari: day,
       tanggal: date + "/" + month + "/" + year,
       check: false,
-      amalDummy: [
-        { amal: "Dhuha", check: false },
-        { amal: "Qiyamul lail", check: false },
-        { amal: "Tilawah", check: false }
-      ]
+      amals: [],
     };
     this.checklistAmal = this.checklistAmal.bind(this);
     console.log("hour->", hour, " minute->", minute);
   }
 
+  componentDidMount() {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT * FROM transaksi_reminder`,
+          null,
+          (_, { rows: { _array } }) => {
+            var newArray = _array.filter(function (el) {
+              return el.hari == day;
+            });
+            this.setState({ amals: newArray }, () => {
+            console.log("amal amal", this.state.amals);
+          })}
+        );
+      },
+      error => {
+        console.log("error get lembar amal", error);
+      },
+      null
+    );
+  }
+
   checklistAmal(index) {
-    amalDummy = this.state.amalDummy;
-    if (amalDummy[index].check === false) {
-      amalDummy[index].check = true;
-      this.setState({ amalDummy: amalDummy }, () => {
-        console.log(this.state.amalDummy);
+    amals = this.state.amals;
+    if (amals[index].selesai === 0) {
+      amals[index].selesai = 1;
+      this.setState({ amals: amals }, () => {
+        console.log(this.state.amals);
       });
     } else {
-      amalDummy[index].check = false;
-      this.setState({ amalDummy: amalDummy }, () => {
-        console.log(this.state.amalDummy);
+      amals[index].selesai = 0;
+      this.setState({ amals: amals }, () => {
+        console.log(this.state.amals);
       });
     }
   }
@@ -57,13 +77,36 @@ export default class LembarMutabaah extends Component {
   renderItem(item, index) {
     return (
       <View style={styles.wrapYaumiyah}>
-        <Text style={styles.textAmal}>{item.amal}</Text>
+        <Text style={styles.textAmal}>{item.nama_mutabaah}</Text>
         <CheckBox
           color="#8B0000"
-          checked={item.check}
+          checked={ item.selesai==0 ? false : true }
           onPress={() => this.checklistAmal(index)}
         />
       </View>
+    );
+  }
+
+  submitReminder() {
+    db.transaction(
+      tx => {
+        for (i = 0; i < this.state.amals.length; i++) {
+          tx.executeSql(
+            `update transaksi_reminder SET selesai = ? WHERE nama_mutabaah= ? AND hari= ? `,
+            [
+              this.state.amals[i].selesai,
+              this.state.amals[i].nama_mutabaah,
+              this.state.amals[i].hari
+            ],
+            () => alert("Data telah ditambahkan"),
+            () => alert("Data gagal ditambahkan")
+          );
+        }
+      },
+      error => {
+        console.log("error add transaksi reminder ", error);
+      },
+      null
     );
   }
 
@@ -88,7 +131,7 @@ export default class LembarMutabaah extends Component {
         <View style={{ flex: 1, marginTop: 20 }}>
           <ScrollView>
             <FlatList
-              data={this.state.amalDummy}
+              data={this.state.amals}
               renderItem={({ item, index }) => this.renderItem(item, index)}
               extraData={this.state}
               keyExtractor={(item, index) => index}

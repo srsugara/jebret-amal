@@ -8,8 +8,11 @@ import {
   TouchableOpacity
 } from "react-native";
 import { CheckBox } from "native-base";
+import { SQLite } from "expo";
 
 import styles from "./styles";
+
+const db = SQLite.openDatabase("db.db");
 
 export default class TambahYaumiyah extends Component {
   constructor(props) {

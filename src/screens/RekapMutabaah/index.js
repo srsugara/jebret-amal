@@ -1,17 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, Picker, PickerIOS, Platform } from "react-native";
 import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
-
+import Expo, { SQLite } from "expo";
 import styles from "./styles";
-
-const data = [
-  { quarter: "Sedekah", earnings: 80 },
-  { quarter: "Sholat Duha", earnings: 95 },
-  { quarter: "Sholat Tahajud", earnings: 77.5 },
-  { quarter: "Al Ma'surat Pagi", earnings: 95 },
-  { quarter: "Al Ma'surat Petang", earnings: 80 },
-  { quarter: "Tilawah", earnings: 95 }
-];
+const db = SQLite.openDatabase("db.db");
 
 export default class RekapMutabaah extends Component {
   constructor(props) {
@@ -32,8 +24,50 @@ export default class RekapMutabaah extends Component {
         "November",
         "Desember"
       ],
-      month: ""
+      month: "",
+      data: [],
+      dataChange: []
     };
+  }
+
+  componentDidMount() {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT * FROM mutabaah_yaumiyah`,
+          null,
+          (_, { rows: { _array } }) => this.setState({ mutabaahs: _array })
+        );
+        tx.executeSql(
+          `SELECT * FROM transaksi_reminder`,
+          null,
+          (_, { rows: { _array } }) => this.setState({ transactions: _array }, ()=>{
+            console.log("uhuyyy",this.state.transactions)
+          })
+        );
+      },
+      error => {
+        console.log("error", error);
+      },
+      x => {
+        let data=this.state.mutabaahs.map((x,y) => {
+          var done=0;
+          for(i=0;i<this.state.transactions.length;i++) {
+            if(this.state.transactions[i].nama_mutabaah==x.nama && this.state.transactions[i].selesai==1) {
+              done++;
+            }
+          }
+          x.quarter = x.nama;
+          x.earnings = (done/30)*100;
+          delete x.id;
+          delete x.nama;
+          return x;
+        });
+        this.setState({data},()=>{
+          console.log(data);
+        });
+      }
+    );
   }
 
   render() {
@@ -41,10 +75,15 @@ export default class RekapMutabaah extends Component {
       return (
         <View style={styles.container}>
           <Picker
+            selectedValue="Oktober"
             style={styles.wrapDay}
             selectedValue={this.state.month}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({ month: itemValue })
+              {if (itemValue=="Oktober") {
+                this.setState({ dataChange:this.state.data,month: itemValue })
+              } else {
+                this.setState({ dataChange:[],month: itemValue })
+              }}
             }
           >
             {this.state.months.map((data, index) => (
@@ -59,7 +98,7 @@ export default class RekapMutabaah extends Component {
           >
             <VictoryBar
               horizontal
-              data={data}
+              data={this.state.dataChange}
               alignment="end"
               x="quarter"
               y="earnings"
@@ -89,7 +128,7 @@ export default class RekapMutabaah extends Component {
           >
             <VictoryBar
               horizontal
-              data={data}
+              data={this.state.data}
               alignment="end"
               x="quarter"
               y="earnings"
